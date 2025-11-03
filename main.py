@@ -8,7 +8,7 @@ import uvicorn
 from app.database.db import init_db
 from app.goods.routers.goods import router as router_goods
 from app.books.routers.book_router import router as book_router
-
+from app.auth.routers.login import router as auth_router
 
 
 @asynccontextmanager
@@ -43,6 +43,7 @@ async def test():
 
 app.include_router(router_goods)
 app.include_router(book_router)
+app.include_router(auth_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

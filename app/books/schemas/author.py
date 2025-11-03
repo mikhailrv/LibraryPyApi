@@ -1,7 +1,6 @@
 from typing import Optional
 from sqlmodel import SQLModel
 
-
 class AuthorDetail(SQLModel):
     key: str
     name: str

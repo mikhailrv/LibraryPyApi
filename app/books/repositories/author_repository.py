@@ -1,5 +1,6 @@
 from sqlmodel import select
 from app.books.models.author import Author
+from app.books.models.book_author import BookAuthor
 from app.database.db import AsyncSession
 import secrets
 from typing import List, Optional
@@ -26,8 +27,10 @@ class AuthorRepository:
         return result.scalar_one_or_none()
 
     @staticmethod
-    async def get_by_book_id(session: AsyncSession, book_id: int) -> List[Author]:
-        # Для твоей текущей модели Book, где author_key — один автор
-        result = await session.execute(select(Author).where(Author.key == book_id))
-        author = result.scalar_one_or_none()
-        return [author] if author else []
+    async def get_authors(session: AsyncSession, book_key: str) -> List[Author]:
+        result = await session.execute(
+            select(Author)
+            .join(BookAuthor, Author.key == BookAuthor.author_key)
+            .where(BookAuthor.book_key == book_key)
+        )
+        return result.scalars().all()
